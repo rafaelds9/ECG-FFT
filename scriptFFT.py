@@ -53,28 +53,50 @@ atrialFib = np.stack((atrialFib0,atrialFib1,atrialFib2, atrialFib3))
 
 
 #Frequency axis
+# Frequency values from 0 to the Sampling rate/2 
+# (10*Fs//2 = 1800 values)
+# The number of samples is halved because the input is a real signal
+# i.e only positive frequencies values are used
 xf = np.linspace(0.0, 1.0/(2.0*1/samplingRate), 10*samplingRate//2)
 
+
 for itClass in range(2):
-    
-    if (itClass == 0):
-        fig0 = plt.figure(figsize=(19.2,9.91)) #19.2,9.91
-    else:
-        fig1 = plt.figure(figsize=(19.2,9.91)) #19.2,9.91
 
     plt.rcParams.update({'font.size': 16})
+    
+    if (itClass == 0):
+        fig0 = plt.figure(figsize=(19.2,9.91))
+        fig0.suptitle("Normal")
+    else:
+        fig1 = plt.figure(figsize=(19.2,9.91))
+        fig1.suptitle("Atrial Fibrillation")
+
+    
 
     for itSignal in range(4):
-        if (itClass == 0):
-            fft = rfft(normal[0:][itSignal])
-        else:
-            fft = rfft(atrialFib[0:][itSignal])
-    
-        ax=plt.subplot(2, 2, itSignal+1)  
-        plt.plot(xf, 2.0/10*samplingRate * np.abs(fft[0:10*samplingRate//2]))
-        plt.grid()
-        ax.set_ylim(-100, 1500)
 
-#Ver o eixo das frequencias
+        ax=plt.subplot(2, 2, itSignal+1)  
+
+        if (itClass == 0):
+
+            # Negative frequencies are ignored
+            # If x = signal before FFT and y = FFT(x) and k index of x and y
+            # Then t = k*T/N = time value of x[k] nad f = k/N = frequency of y[k]
+            fft = rfft(normal[0:][itSignal])
+            plt.title('Signal '+str(itSignal+1))
+            print("DC - Normal No.",itSignal+1, "=", np.round(np.abs(fft[0]),3))
+        else:
+             
+            fft = rfft(atrialFib[0:][itSignal])
+            plt.title('Signal '+str(itSignal+1))
+            print("DC - Atrial Fib No.",itSignal+1, "=", np.round(np.abs(fft[0]),3))
+
+
+        plt.plot(xf, np.abs(fft[0:10*samplingRate//2]))
+        plt.grid()
+        ax.set_ylim(-1, 22)
+        ax.set_xlim(-10, 1.0/(2.0*1/samplingRate))
+
+plt.tight_layout
 plt.show()
 
