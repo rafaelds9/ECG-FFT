@@ -51,6 +51,41 @@ atrialFib = np.stack((atrialFib0,atrialFib1,atrialFib2, atrialFib3))
 #normalSummary = ecg.ecg(signal=normal0, sampling_rate=samplingRate, show=True)
 #atrailFibSummary = ecg.ecg(signal=atrialFib0, sampling_rate=samplingRate, show=True)
 
+#Hard coded for these signals (10s interval with 3600 samples)
+xt = np.linspace(0.0, 10.0, 10*samplingRate)
+
+for itClass in range(2):
+
+    plt.rcParams.update({'font.size': 16})
+
+    if (itClass == 0):
+        fig0 = plt.figure(figsize=(19.2,9.91))
+        fig0.suptitle("Time Domain - Normal")
+    else:
+        fig1 = plt.figure(figsize=(19.2,9.91))
+        fig1.suptitle("Time Domain - Atrial Fibrillation")
+
+    
+
+    for itSignal in range(4):
+
+        ax=plt.subplot(2, 2, itSignal+1)  
+
+        if (itClass == 0):
+            plt.title('Signal '+str(itSignal+1))
+            plt.plot(xt, normal[0:][itSignal])
+        else:
+
+            plt.title('Signal '+str(itSignal+1))
+            plt.plot(xt, atrialFib[0:][itSignal])
+        
+        plt.grid()
+        #ax.set_ylim(-1, 22)
+        ax.set_xlim(-0.03, 3)
+
+plt.tight_layout
+plt.show()
+
 
 #Frequency axis
 # Frequency values from 0 to the Sampling rate/2 
@@ -63,13 +98,13 @@ xf = np.linspace(0.0, 1.0/(2.0*1/samplingRate), 10*samplingRate//2)
 for itClass in range(2):
 
     plt.rcParams.update({'font.size': 16})
-    
+
     if (itClass == 0):
         fig0 = plt.figure(figsize=(19.2,9.91))
-        fig0.suptitle("Normal")
+        fig0.suptitle("Frequency Domain - Normal")
     else:
         fig1 = plt.figure(figsize=(19.2,9.91))
-        fig1.suptitle("Atrial Fibrillation")
+        fig1.suptitle("Frequency Domain - Atrial Fibrillation")
 
     
 
